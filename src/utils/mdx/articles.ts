@@ -16,6 +16,6 @@ export async function getArticle({
   const fullPath = join(articles_path_locale(locale), `${slug}.mdx`);
   console.log(fullPath);
   const fileContent = fs.readFileSync(fullPath, "utf8");
-  const source = await serialize(fileContent, {parseFrontmatter:true});
-  return source;
+  return await serialize(fileContent, {parseFrontmatter:true});
+  
 }

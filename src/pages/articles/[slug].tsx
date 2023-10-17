@@ -2,6 +2,7 @@ import {
   type GetStaticPropsContext,
   type GetStaticPaths,
   type GetStaticPathsResult,
+  type InferGetStaticPropsType,
 } from "next";
 
 import { createServerSideHelpers } from "@trpc/react-query/server";
@@ -38,7 +39,7 @@ export async function getStaticProps(ctx: GetStaticPropsContext<PageParams>) {
       notFound: true,
     };
 
-  const locale = ctx.locale ?? ctx.defaultLocale;
+  const locale = ctx.locale ?? ctx.defaultLocale ?? "fr";
 
   await helpers.article.articleContent.prefetch({
     slug,
@@ -55,21 +56,17 @@ export async function getStaticProps(ctx: GetStaticPropsContext<PageParams>) {
   };
 }
 
-export default function ArticlePage({ slug, locale }) {
+export default function ArticlePage({
+  slug,
+  locale,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const postQuery = api.article.articleContent.useQuery({ slug, locale });
   const { data } = postQuery;
 
   console.log({ data });
   return (
     <main>
-      {data ? (
-        <MDXRemote
-          compiledSource={data?.compiledSource}
-          components={{ MakeMeRed }}
-        />
-      ) : (
-        <p>Lol</p>
-      )}
+      {data ? <MDXRemote {...data} components={{ MakeMeRed }} /> : <p>Lol</p>}
     </main>
   );
 }
