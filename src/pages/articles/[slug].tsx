@@ -9,7 +9,7 @@ import { createServerSideHelpers } from "@trpc/react-query/server";
 import { appRouter } from "@/server/api/root";
 import superJSON from "superjson";
 
-import { db } from "@/server/db";
+// import { db } from "@/server/db";
 import { api } from "@/utils/api";
 import { MDXRemote } from "next-mdx-remote";
 import { MakeMeRed } from "@/components/mdx/MakeMeRed";
@@ -29,7 +29,9 @@ export const getStaticPaths: GetStaticPaths =
 export async function getStaticProps(ctx: GetStaticPropsContext<PageParams>) {
   const helpers = createServerSideHelpers({
     router: appRouter,
-    ctx: { db },
+    ctx: {
+      // db
+    },
     transformer: superJSON,
   });
   const slug = ctx.params?.slug;
